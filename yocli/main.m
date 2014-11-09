@@ -11,19 +11,20 @@
 
 
 int main(int argc, const char * argv[]) {
-    if(argc != 3) {
-        NSLog(@"%s: apikey yosername\n", argv[0]);
+    if(argc < 3) {
+        NSLog(@"%s: apikey [yosernames ...]\n", argv[0]);
         exit(1);
     }
     
     @autoreleasepool {
-        YoContext *benContext = [YoContext
+        YoContext *serverContext = [YoContext
                 contextFromAPIToken:[NSString stringWithFormat:@"%s", argv[1]]];
-        
-        if([benContext yo:[NSString stringWithFormat:@"%s", argv[2]]])
-            NSLog(@"sent yo to %s\n", argv[2]);
-        else
-            NSLog(@"failed to send yo\n");
+        for(int i = 2; i < argc; i++) {
+            if([serverContext yo:[NSString stringWithFormat:@"%s", argv[i]]])
+                printf("sent yo to %s\n", argv[i]);
+            else
+                printf("failed to yo %s\n", argv[i]);
+        }
     }
     return 0;
 }
