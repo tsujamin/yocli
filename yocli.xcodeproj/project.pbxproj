@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		430DB6C11A0EFA46005B38AF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 430DB6C01A0EFA46005B38AF /* main.m */; };
+		430DB6C91A0EFB9A005B38AF /* YoContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 430DB6C81A0EFB9A005B38AF /* YoContext.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,8 @@
 /* Begin PBXFileReference section */
 		430DB6BD1A0EFA46005B38AF /* yocli */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = yocli; sourceTree = BUILT_PRODUCTS_DIR; };
 		430DB6C01A0EFA46005B38AF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		430DB6C71A0EFB9A005B38AF /* YoContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YoContext.h; sourceTree = "<group>"; };
+		430DB6C81A0EFB9A005B38AF /* YoContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YoContext.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +61,8 @@
 			isa = PBXGroup;
 			children = (
 				430DB6C01A0EFA46005B38AF /* main.m */,
+				430DB6C71A0EFB9A005B38AF /* YoContext.h */,
+				430DB6C81A0EFB9A005B38AF /* YoContext.m */,
 			);
 			path = yocli;
 			sourceTree = "<group>";
@@ -119,6 +124,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				430DB6C11A0EFA46005B38AF /* main.m in Sources */,
+				430DB6C91A0EFB9A005B38AF /* YoContext.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
