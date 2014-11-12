@@ -9,7 +9,7 @@ streams = {}
 queues = {}
 
 #get request for yo's
-get '/stream/:apikey', provides: 'text/event-stream' do
+get '/:apikey/stream', provides: 'text/event-stream' do
   stream :keep_open do |stream|
     #extract key of request
     key = params[:apikey]
@@ -46,7 +46,7 @@ get '/stream/:apikey', provides: 'text/event-stream' do
 end
 
 #yoapi callback
-get '/yo/:apikey' do
+get '/:apikey/yo' do
   key = params[:apikey]
   
   #check for existing queue
