@@ -1,11 +1,12 @@
 #! /usr/bin/env ruby
 require 'sinatra'
+require 'sinatra/streaming'
 require 'json'
 
 QUEUE_LENGTH = 10
 
-connections = {}
-message_queues = {}
+streams = {}
+queues = {}
 
 #get request for yo's
 get '/stream/:apikey', provides: 'text/event-stream' do
@@ -16,30 +17,31 @@ get '/stream/:apikey', provides: 'text/event-stream' do
     puts "new connection (#{key})"
 
     #remove/close old connection if exists
-    if connections.include? key
-      connections[key].close
-      connections.delete(key)
+    if streams.include? key
+      streams[key].close
+      streams.delete(key)
     end
     
     #store stream for redirection later
-    connections[params[:apikey]] = stream
+    streams[params[:apikey]] = stream
     
     #delete if stream closes
     stream.callback { 
       puts "stream closed (#{key})"
-      connections.delete(key) 
+      streams.delete(key) 
     }
 
     stream.errback {
       puts "stream errored (#{key})"
-      connections.delete(key)
+      streams.delete(key)
     }
     
     #create the queue
-    message_queues[key] ||= [] 
+    queues[key] ||= [] 
     
     #push queued messages out
-    message_queues[key].drop_while {|yo| stream << yo}
+    queues[key].drop_while {|yo| stream << yo + '\n'}
+    stream.flush
   end
 end
 
@@ -48,7 +50,7 @@ get '/yo/:apikey' do
   key = params[:apikey]
   
   #check for existing queue
-  unless message_queues.include? key
+  unless queues.include? key
     puts "queue doesn't exist (#{key})"
     halt 400
   end
@@ -62,13 +64,14 @@ get '/yo/:apikey' do
   #extract relevant dict fields  	
   yo = params.select {|key,_| ['username'].include? key}
   yo['timestamp'] = Time.now
-  queue = message_queues[key]
+  queue = queues[key]
 
-  if connections.include? key
+  if streams.include? key
     # send the received yo to the client
     puts "forwarding yo from #{yo['username']} (#{key})"
-    connection = connections[key]
-    connection << yo.to_json
+    stream = connections[key]
+    stream << yo.to_json
+    stream.flush
     
   else
     # add the received yo to the cache queue
