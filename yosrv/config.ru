@@ -1,2 +1,2 @@
-re './hello'
+require './yosrv.rb'
 run Sinatra::Application
