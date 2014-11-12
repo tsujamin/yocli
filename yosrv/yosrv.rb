@@ -40,9 +40,9 @@ get '/stream/:apikey', provides: 'text/event-stream' do
     queues[key] ||= [] 
     
     #push queued messages out
-    queues[key].drop_while {|yo| stream << yo + '\n'}
+    queues[key].drop_while {|yo| stream << yo.to_json + "\n"}
     stream.flush
-  end
+  end  
 end
 
 #yoapi callback
@@ -69,7 +69,7 @@ get '/yo/:apikey' do
   if streams.include? key
     # send the received yo to the client
     puts "forwarding yo from #{yo['username']} (#{key})"
-    stream = connections[key]
+    stream = streams[key]
     stream << yo.to_json
     stream.flush
     

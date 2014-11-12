@@ -10,7 +10,7 @@
 
 # Use at least one worker per core if you're on a dedicated server,
 # more will usually help for _short_ waits on databases/caches.
-worker_processes 2
+worker_processes 1
 
 # Since Unicorn is never exposed to outside clients, it does not need to
 # run on the standard HTTP port (80), there is no reason to start Unicorn
@@ -25,7 +25,9 @@ working_directory "" # available in 0.94.0+
 
 # listen on both a Unix domain socket and a TCP port,
 # we use a shorter backlog for quicker failover when busy
-listen "/var/sockets/yosrv/unicorn.yosrv.sock", :backlog => 64
+unless ENV.include? 'DEBUG'
+   listen "/var/sockets/yosrv/unicorn.yosrv.sock", :backlog => 64
+end
 listen 8080, :tcp_nopush => true
 
 # nuke workers after 30 seconds instead of 60 seconds (the default)
@@ -37,8 +39,10 @@ pid "/tmp/unicorn.yosrv.pid"
 # By default, the Unicorn logger will write to stderr.
 # Additionally, ome applications/frameworks log to stderr or stdout,
 # so prevent them from going to /dev/null when daemonized here:
-stderr_path "/var/log/yosrv/unicorn.yosrv.stderr.log"
-stdout_path "/var/log/yosrv/unicorn.yosrv.stdout.log"
+unless ENV.include? 'DEBUG'
+  stderr_path "/var/log/yosrv/unicorn.yosrv.stderr.log"
+  stdout_path "/var/log/yosrv/unicorn.yosrv.stdout.log"
+end
 
 # combine Ruby 2.0.0dev or REE with "preload_app true" for memory savings
 # http://rubyenterpriseedition.com/faq.html#adapt_apps_for_cow
